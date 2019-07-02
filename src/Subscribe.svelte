@@ -1,5 +1,6 @@
 <script>
   import Modal from "./Modal.svelte";
+  import Button from "./Button.svelte";
   import { db } from "./firebase.js";
 
   let subBoxOpen = false;
@@ -8,12 +9,14 @@
   let email = "";
   let comment = "";
 
+  let subscribePending = false;
   let subscribeError = null;
   let subscribeSuccess = null;
 
   function subscribe(e) {
-    e.preventDefault()
-    console.log('subscribing')
+    e.preventDefault();
+    console.log("subscribing");
+    subscribePending = true;
     db.collection("subscribers")
       .doc()
       .set({
@@ -33,16 +36,24 @@
         console.log(e);
         subscribeError =
           "Crap, something failed. That's embarrassing. Hopefully it will be fixed soon.";
+      })
+      .then(() => {
+        subscribePending = false;
       });
   }
 </script>
 
 <style>
   form {
-    width: 100%;
-    max-width: 400px;
     display: flex;
     flex-direction: column;
+  }
+
+  input,
+  label,
+  textarea {
+    width: 100%;
+    max-width: 400px;
   }
 
   button {
@@ -54,28 +65,39 @@
   h2 {
     margin: 0;
   }
+
+  .cta {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .error {
+    color: red;
+  }
 </style>
 
-<button on:click={() => subBoxOpen = !subBoxOpen}>Subscribe</button>
+<button class="cta" on:click={() => (subBoxOpen = !subBoxOpen)}>
+  Subscribe
+</button>
 
 {#if subscribeSuccess}
   <div class="success">{subscribeSuccess}</div>
 {/if}
 
 <Modal bind:open={subBoxOpen}>
-  <h2 slot="title">Join the waitlist for the eventually.now beta</h2>
+  <h2 slot="title">Join the waitlist to eventually.run your code</h2>
   <form slot="content" on:submit={subscribe}>
-
     <label for="name">Name</label>
     <input bind:value={name} id="name" />
     <label for="email">Email</label>
     <input required bind:value={email} id="email" />
-    <label for="comment">Comment</label>
+    <label for="comment">Any Comments?</label>
     <textarea bind:value={comment} id="comment" />
+    <br />
     {#if subscribeError}
       <div class="error">{subscribeError}</div>
     {/if}
-    <br>
-    <button type="submit">Send</button>
+    <Button props={{ type: 'submit' }} loading={subscribePending}>Send</Button>
   </form>
 </Modal>

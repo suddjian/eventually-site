@@ -21,20 +21,24 @@
     justify-content: center;
     align-items: center;
     background: rgba(0, 0, 0, 0.1);
+    margin-top: 0;
   }
 
   .modal {
     position: absolute;
     width: calc(100% - 40px);
     max-width: 600px;
-    background: white;
     padding: 20px;
-    border-radius: 4px;
+    margin-top: 0;
 
     display: grid;
     grid-template-areas:
       "title close"
-      "main main"
+      "main main";
+    
+    background: white;
+    border-radius: 4px;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.03);
   }
 
   .close {
@@ -47,6 +51,7 @@
 
   .title {
     grid-area: title;
+    margin-top: 0;
   }
 
   .main {
