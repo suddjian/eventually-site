@@ -1,0 +1,14 @@
+{
+  "name": "eventually-run",
+  "version": 2,
+  "alias": [
+    "eventually.run"
+  ],
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@now/static-build",
+      "config": { "distDir": "public" }
+    }
+  ]
+}
