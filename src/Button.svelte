@@ -1,9 +1,9 @@
 <script>
-  export let loading = false;
-  export let props = {}
+  export let disabled
+  export let loading
 </script>
 
-<button {...props} disabled={props.disabled || loading}>
+<button {...$$props} loading={undefined} disabled={disabled || loading}>
   {#if loading}
     ...
   {:else}

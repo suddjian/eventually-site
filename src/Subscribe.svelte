@@ -98,6 +98,6 @@
     {#if subscribeError}
       <div class="error">{subscribeError}</div>
     {/if}
-    <Button props={{ type: 'submit' }} loading={subscribePending}>Send</Button>
+    <Button type="submit" loading={subscribePending}>Send</Button>
   </form>
 </Modal>
