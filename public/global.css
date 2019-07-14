@@ -62,6 +62,8 @@ button:not(.ui) {
 	width: fit-content;
 	padding-right: 50px;
 	padding-left: 50px;
+	background: #FFD21A;
+	border: 1px #DCBA30;
 }
 
 button:active {
