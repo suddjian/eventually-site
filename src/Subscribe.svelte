@@ -1,17 +1,29 @@
 <script>
   import Modal from "./Modal.svelte";
   import Button from "./Button.svelte";
-  import { db } from "./firebase.js";
+  
+  var firebaseConfig = {
+    apiKey: "AIzaSyAMDcv3PHGZ9dqUeSvTx-bb34N3rE6iRA0",
+    authDomain: "eventually-run.firebaseapp.com",
+    databaseURL: "https://eventually-run.firebaseio.com",
+    projectId: "eventually-run",
+    storageBucket: "eventually-run.appspot.com",
+    messagingSenderId: "258423598106",
+    appId: "1:258423598106:web:bd500052846f6b8f"
+  };
 
-  let subBoxOpen = false;
+  window.firebase.initializeApp(firebaseConfig);
+
+  const db = firebase.firestore();
 
   let name = "";
   let email = "";
   let comment = "";
 
+  let subBoxOpen = false;
   let subscribePending = false;
-  let subscribeError = null;
-  let subscribeSuccess = null;
+  let subscribeError = false;
+  let subscribeSuccess = false;
 
   function subscribe(e) {
     e.preventDefault();
@@ -26,16 +38,14 @@
         subscribed_at: new Date()
       })
       .then(() => {
-        console.log("subscribed successfully");
+        console.log("signed up successfully");
         subBoxOpen = false;
-        subscribeSuccess =
-          "Thanks! You're signed up for the beta and we'll be in touch. We promise not to spam you.";
+        subscribeSuccess = true;
       })
       .catch(e => {
-        console.log("failed to subscribe");
+        console.log("failed to sign up");
         console.log(e);
-        subscribeError =
-          "Crap, something failed. That's embarrassing. Hopefully it will be fixed soon.";
+        subscribeError = true;
       })
       .then(() => {
         subscribePending = false;
@@ -56,12 +66,6 @@
     max-width: 400px;
   }
 
-  button {
-    width: fit-content;
-    padding-right: 50px;
-    padding-left: 50px;
-  }
-
   h2 {
     margin: 0;
   }
@@ -72,17 +76,25 @@
     margin-right: auto;
   }
 
+  .center {
+    text-align: center;
+  }
+
   .error {
     color: red;
+  }
+
+  .success {
+    color: green;
   }
 </style>
 
 <button class="cta" on:click={() => (subBoxOpen = !subBoxOpen)}>
-  Subscribe
+  <slot></slot>
 </button>
 
 {#if subscribeSuccess}
-  <div class="success">{subscribeSuccess}</div>
+  <div class="success center">Awesome! You're signed up for the beta and we'll be in touch.</div>
 {/if}
 
 <Modal bind:open={subBoxOpen}>
@@ -92,12 +104,12 @@
     <input bind:value={name} id="name" />
     <label for="email">Email</label>
     <input required bind:value={email} id="email" />
-    <label for="comment">Any Comments?</label>
+    <label for="comment">Tell us about yourself, and your scheduling needs:</label>
     <textarea bind:value={comment} id="comment" />
     <br />
     {#if subscribeError}
-      <div class="error">{subscribeError}</div>
+      <div class="error">Crap, something failed. That's embarrassing. Hopefully it will be fixed soon.</div>
     {/if}
-    <Button type="submit" loading={subscribePending}>Send</Button>
+    <Button type="submit" loading={subscribePending}>Sign Up</Button>
   </form>
 </Modal>

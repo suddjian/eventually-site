@@ -55,10 +55,13 @@ input[type="range"] {
 	height: 0;
 }
 
-button {
+button:not(.ui) {
 	color: #333;
 	background-color: #f4f4f4;
 	outline: none;
+	width: fit-content;
+	padding-right: 50px;
+	padding-left: 50px;
 }
 
 button:active {
