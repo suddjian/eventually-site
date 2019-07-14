@@ -5,8 +5,22 @@
     open = false
   }
 
-  function absorb(e) {
+  let closeable = false
+  function bgMousedown(e) {
     e.stopPropagation()
+    closeable = true
+  }
+
+  function fgMousedown(e) {
+    e.stopPropagation()
+    closeable = false
+  }
+
+  function maybeClose(e) {
+    e.stopPropagation()
+    if (closeable) {
+      open = false
+    }
   }
 </script>
 
@@ -60,9 +74,9 @@
 </style>
 
 {#if open}
-  <div class="background" on:click={close}>
-    <div class="modal" on:click={absorb}>
-      <button class="close" on:click={close}>
+  <div class="background" on:mousedown={bgMousedown} on:mouseup={maybeClose}>
+    <div class="modal" on:mousedown={fgMousedown}>
+      <button class="ui close" on:click={close}>
         <img src="/icons/close.svg" alt="close" />
       </button>
       <div class="title"><slot name="title"></slot></div>
